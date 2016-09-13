@@ -10,12 +10,15 @@ class Competition(models.Model):
 
     name = models.CharField(max_length=100)
 
-
+    def __repr__(self):
+        return self.name
 
 class Team(models.Model):
 
     name = models.CharField(max_length=100)
 
+    def __repr__(self):
+        return self.name
 
 class TeamSnapshot(models.Model):
 
@@ -25,6 +28,8 @@ class TeamSnapshot(models.Model):
 
     date = models.DateField()
 
+    def __repr__(self):
+        return '%s the %s' % (repr(self.team), self.date)
 
 class Match(models.Model):
 
@@ -65,3 +70,10 @@ class Match(models.Model):
         # parse goals
         self.full_time_home_goals = int(line_split[4])
         self.full_time_away_goals = int(line_split[5])
+
+    def __repr__(self):
+        return '%s vs %s the %s: %d - %d' % (repr(self.home_team),
+                                             repr(self.away_team),
+                                             self.date,
+                                             self.full_time_home_goals,
+                                             self.full_time_away_goals)
