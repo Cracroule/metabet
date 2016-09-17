@@ -58,8 +58,7 @@ class Command(BaseCommand):
                 #ignore header
                 if i == 0:
                     continue
-                match = Match()
-                match.parse_from_csv_line(line)
+                match = Match.from_csv_line(line)
                 match.competition = competition
                 match.save()
 

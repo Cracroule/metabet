@@ -45,7 +45,9 @@ class Match(models.Model):
 
     full_time_away_goals = models.IntegerField()
 
-    def parse_from_csv_line(self, csv_line):
+    @classmethod
+    def from_csv_line(cls, csv_line):
+        kwargs = {}
         line_split = csv_line.split(',')
 
         # parse date
@@ -53,23 +55,25 @@ class Match(models.Model):
         year = int(date_split[2]) + 2000
         month = int(date_split[1])
         day = int(date_split[0])
-        self.date = date(year=year, month=month, day=day)
+        kwargs['date'] = date(year=year, month=month, day=day)
 
         # parse teams
         home_team_name = line_split[2]
         away_team_name = line_split[3]
         if not Team.objects.filter(name=home_team_name).exists():
-            logger.error('->TeamDoesNotExist<- :%s', home_team_name)
+            logger.error('->TeamDoesNotExist<- : %s', home_team_name)
             raise ValueError()
-        self.home_team = Team.objects.get(name=home_team_name)
+        kwargs['home_team'] = Team.objects.get(name=home_team_name)
         if not Team.objects.filter(name=away_team_name).exists():
-            logger.error('->TeamDoesNotExist<- :%s', away_team_name)
+            logger.error('->TeamDoesNotExist<- : %s', away_team_name)
             raise ValueError()
-        self.away_team = Team.objects.get(name=away_team_name)
+        kwargs['away_team'] = Team.objects.get(name=away_team_name)
 
         # parse goals
-        self.full_time_home_goals = int(line_split[4])
-        self.full_time_away_goals = int(line_split[5])
+        kwargs['full_time_home_goals'] = int(line_split[4])
+        kwargs['full_time_away_goals'] = int(line_split[5])
+
+        return cls(**kwargs)
 
     def __repr__(self):
         return '%s vs %s the %s: %d - %d' % (repr(self.home_team),
