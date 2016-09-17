@@ -10,26 +10,40 @@ class Competition(models.Model):
 
     name = models.CharField(max_length=100)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
+
+class CompetitionSeason(models.Model):
+
+    competition = models.ForeignKey(Competition)
+
+    # represents the season in which the competition takes place.
+    # Ex: 2015-2016
+    season = models.CharField(max_length=9)
+
+    class Meta:
+        unique_together = (('competition', 'season'))
+
+    def __str__(self):
+        return '%s %s' % (str(self.competition), self.season)
 
 class Team(models.Model):
 
     name = models.CharField(max_length=100)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
 
 class TeamSnapshot(models.Model):
 
-    league = models.ForeignKey(Competition)
+    league = models.ForeignKey(CompetitionSeason)
 
     team = models.ForeignKey(Team)
 
     date = models.DateField()
 
-    def __repr__(self):
-        return '%s the %s' % (repr(self.team), self.date)
+    def __str__(self):
+        return '%s the %s' % (str(self.team), self.date)
 
 class Match(models.Model):
 
@@ -85,9 +99,9 @@ class Match(models.Model):
 
         return cls(**kwargs)
 
-    def __repr__(self):
-        return '%s vs %s %s: %d - %d' % (repr(self.home_team),
-                                             repr(self.away_team),
-                                             self.date,
-                                             self.full_time_home_goals,
-                                             self.full_time_away_goals)
+    def __str__(self):
+        return '%s vs %s %s: %d - %d' % (str(self.home_team),
+                                         str(self.away_team),
+                                         self.date,
+                                         self.full_time_home_goals,
+                                         self.full_time_away_goals)

@@ -1,8 +1,8 @@
 import os
 
-from metabet_core.models import Competition, Team, Match
+from metabet_core.models import Competition, CompetitionSeason, Team, Match
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 DATA_DIR_PREFIX = 'metabet_core/data/ligue_1/%s/'
 
@@ -53,6 +53,21 @@ class Command(BaseCommand):
         competition = self.init_competition()
         season = options['season'][0]
         data_dir = DATA_DIR_PREFIX % season
+
+        # saving the competition season if it does not exist yet
+        competition_season = CompetitionSeason(
+            competition=competition,
+            season=season
+        )
+        if CompetitionSeason.objects \
+           .filter(competition=competition, season=season).exists():
+            self.stdout.write("%s -> already registered" %
+                              repr(competition_season)
+                             )
+        else:
+            competition_season.save()
+
+        # parsing the file
         with open(data_dir + 'F1.csv') as data_file:
             for i, line in enumerate(data_file.readlines()):
                 #ignore header
@@ -61,9 +76,9 @@ class Command(BaseCommand):
                 match = Match.from_csv_line(line)
                 match.competition = competition
                 if Match.objects.filter(
-                   home_team=match.home_team,
-                   away_team=match.away_team,
-                   date = match.date
+                        home_team=match.home_team,
+                        away_team=match.away_team,
+                        date=match.date
                 ).exists():
                     self.stdout.write("%s -> already registered" % repr(match))
                 else:
