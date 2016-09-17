@@ -45,8 +45,17 @@ class Match(models.Model):
 
     full_time_away_goals = models.IntegerField()
 
+    # H: home victory, D: draw, A: away victory, U: undefined
+    result = models.CharField(max_length=1, default='U')
+
+    class Meta:
+        unique_together = (('home_team', 'away_team', 'date'))
+
     @classmethod
     def from_csv_line(cls, csv_line):
+        """builds a Match object by parsing a line from a football-co.uk file
+        """
+
         kwargs = {}
         line_split = csv_line.split(',')
 
@@ -69,14 +78,15 @@ class Match(models.Model):
             raise ValueError()
         kwargs['away_team'] = Team.objects.get(name=away_team_name)
 
-        # parse goals
+        # parse goals and result
         kwargs['full_time_home_goals'] = int(line_split[4])
         kwargs['full_time_away_goals'] = int(line_split[5])
+        kwargs['result'] = line_split[6]
 
         return cls(**kwargs)
 
     def __repr__(self):
-        return '%s vs %s the %s: %d - %d' % (repr(self.home_team),
+        return '%s vs %s %s: %d - %d' % (repr(self.home_team),
                                              repr(self.away_team),
                                              self.date,
                                              self.full_time_home_goals,

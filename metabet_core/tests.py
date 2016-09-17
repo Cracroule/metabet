@@ -26,3 +26,4 @@ class TestMatch(TestCase):
         self.assertEqual(match.away_team.name, 'Paris SG')
         self.assertEqual(match.full_time_home_goals, 0)
         self.assertEqual(match.full_time_away_goals, 1)
+        self.assertEqual(match.result, 'A')

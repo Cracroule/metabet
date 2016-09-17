@@ -60,6 +60,13 @@ class Command(BaseCommand):
                     continue
                 match = Match.from_csv_line(line)
                 match.competition = competition
-                match.save()
+                if Match.objects.filter(
+                   home_team=match.home_team,
+                   away_team=match.away_team,
+                   date = match.date
+                ).exists():
+                    self.stdout.write("%s -> already registered" % repr(match))
+                else:
+                    match.save()
 
         self.stdout.write("Data loaded")
