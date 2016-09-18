@@ -2,13 +2,23 @@ from rest_framework import serializers
 
 from metabet_core.models import Competition, CompetitionSeason
 
-class CompetitionSeasonNestedSerializer(serializers.ModelSerializer):
+
+class CompetitionSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Competition
+        fields = ('name', 'id', 'url')
+
+
+class CompetitionSeasonSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = CompetitionSeason
         fields = ('id', 'season')
 
-class CompetitionSerializer(serializers.ModelSerializer):
-    competitionseason_set = CompetitionSeasonNestedSerializer(many=True)
+
+class CompetitionDetailSerializer(serializers.ModelSerializer):
+    competitionseason_set = CompetitionSeasonSerializer(many=True)
 
     class Meta:
         model = Competition
