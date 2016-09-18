@@ -13,6 +13,7 @@ class Competition(models.Model):
     def __str__(self):
         return self.name
 
+
 class CompetitionSeason(models.Model):
 
     competition = models.ForeignKey(Competition)
@@ -27,12 +28,14 @@ class CompetitionSeason(models.Model):
     def __str__(self):
         return '%s %s' % (str(self.competition), self.season)
 
+
 class Team(models.Model):
 
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
 
 class TeamSnapshot(models.Model):
 
@@ -45,9 +48,10 @@ class TeamSnapshot(models.Model):
     def __str__(self):
         return '%s the %s' % (str(self.team), self.date)
 
+
 class Match(models.Model):
 
-    competition = models.ForeignKey(Competition)
+    competition_season = models.ForeignKey(CompetitionSeason)
 
     date = models.DateField()
 

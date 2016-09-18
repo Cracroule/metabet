@@ -62,19 +62,18 @@ class Command(BaseCommand):
         if CompetitionSeason.objects \
            .filter(competition=competition, season=season).exists():
             self.stdout.write("%s -> already registered" %
-                              repr(competition_season)
-                             )
+                              repr(competition_season))
         else:
             competition_season.save()
 
         # parsing the file
         with open(data_dir + 'F1.csv') as data_file:
             for i, line in enumerate(data_file.readlines()):
-                #ignore header
+                # ignore header
                 if i == 0:
                     continue
                 match = Match.from_csv_line(line)
-                match.competition = competition
+                match.competition_season = competition_season
                 if Match.objects.filter(
                         home_team=match.home_team,
                         away_team=match.away_team,
