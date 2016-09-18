@@ -49,6 +49,10 @@ class TeamSnapshot(models.Model):
         return '%s the %s' % (str(self.team), self.date)
 
 
+class TeamDoesNotExistException(Exception):
+    pass
+
+
 class Match(models.Model):
 
     competition_season = models.ForeignKey(CompetitionSeason)
@@ -89,11 +93,11 @@ class Match(models.Model):
         away_team_name = line_split[3]
         if not Team.objects.filter(name=home_team_name).exists():
             logger.error('->TeamDoesNotExist<- : %s', home_team_name)
-            raise ValueError()
+            raise TeamDoesNotExistException({'team_name': home_team_name})
         kwargs['home_team'] = Team.objects.get(name=home_team_name)
         if not Team.objects.filter(name=away_team_name).exists():
             logger.error('->TeamDoesNotExist<- : %s', away_team_name)
-            raise ValueError()
+            raise TeamDoesNotExistException({'team_name': away_team_name})
         kwargs['away_team'] = Team.objects.get(name=away_team_name)
 
         # parse goals and result

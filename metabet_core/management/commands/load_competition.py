@@ -1,6 +1,7 @@
 import os
 
-from metabet_core.models import Competition, CompetitionSeason, Team, Match
+from metabet_core.models import Competition, CompetitionSeason, Team, Match, \
+        TeamDoesNotExistException
 
 from django.core.management.base import BaseCommand
 
@@ -20,6 +21,7 @@ class Command(BaseCommand):
         competition = Competition(name='Ligue 1')
         competition.save()
 
+        # TODO: get rid of this hardcoded list
         teams = [
             'Monaco',
             'Bastia',
@@ -63,6 +65,8 @@ class Command(BaseCommand):
            .filter(competition=competition, season=season).exists():
             self.stdout.write("%s -> already registered" %
                               repr(competition_season))
+            competition_season = CompetitionSeason.objects \
+                .get(competition=competition, season=season)
         else:
             competition_season.save()
 
@@ -72,7 +76,19 @@ class Command(BaseCommand):
                 # ignore header
                 if i == 0:
                     continue
-                match = Match.from_csv_line(line)
+                # ignore last line
+                if line.startswith(','):
+                    continue
+                # FIXME: bug when the 2 teams of the match are not yet recorded
+                try:
+                    match = Match.from_csv_line(line)
+                except TeamDoesNotExistException as e:
+                    team_name = e.args[0]['team_name']
+                    new_team = Team(name=team_name)
+                    new_team.save()
+                    self.stdout.write('registered new team : %s' % (team_name))
+                    match = Match.from_csv_line(line)
+
                 match.competition_season = competition_season
                 if Match.objects.filter(
                         home_team=match.home_team,
