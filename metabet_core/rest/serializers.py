@@ -33,10 +33,10 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
                   'url')
 
 
-class TeamSerializer(serializers.ModelSerializer):
+class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
-        fields = ('name', 'id')
+        fields = ('name', 'id', 'url')
 
 
 class CompetitionDetailSerializer(serializers.ModelSerializer):
@@ -70,3 +70,9 @@ class MatchDetailSerializer(serializers.ModelSerializer):
                   'full_time_home_goals',
                   'full_time_away_goals',
                   'result',)
+
+
+class TeamDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ('name', 'id')

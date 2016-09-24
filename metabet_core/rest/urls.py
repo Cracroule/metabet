@@ -2,7 +2,8 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from metabet_core.rest.views import CompetitionDetailView, \
-        CompetitionListView, CompetitionSeasonDetailView, MatchDetailView
+        CompetitionListView, CompetitionSeasonDetailView, MatchDetailView, \
+        TeamDetailView
 
 api_urlpatterns = [
     url(r'^api/competitions/$',
@@ -17,6 +18,9 @@ api_urlpatterns = [
     url(r'^api/match/(?P<pk>[0-9]+)/$',
         MatchDetailView.as_view(),
         name='match-detail'),
+    url(r'^api/team/(?P<pk>[0-9]+)/$',
+        TeamDetailView.as_view(),
+        name='team-detail'),
 ]
 
 api_urlpatterns = format_suffix_patterns(api_urlpatterns)

@@ -1,9 +1,9 @@
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 
-from metabet_core.models import Competition, CompetitionSeason, Match
+from metabet_core.models import Competition, CompetitionSeason, Match, Team
 from metabet_core.rest.serializers import CompetitionSerializer, \
         CompetitionDetailSerializer, CompetitionSeasonDetailSerializer, \
-        MatchDetailSerializer
+        MatchDetailSerializer, TeamDetailSerializer
 
 
 class CompetitionListView(ListAPIView):
@@ -24,3 +24,8 @@ class CompetitionSeasonDetailView(RetrieveAPIView):
 class MatchDetailView(RetrieveAPIView):
     queryset = Match.objects.all()
     serializer_class = MatchDetailSerializer
+
+
+class TeamDetailView(RetrieveAPIView):
+    queryset = Team.objects.all()
+    serializer_class = TeamDetailSerializer
