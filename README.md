@@ -2,15 +2,22 @@
 
 Football data and API. Developed in Python 3.5.1 with Django 1.10.
 
-## Setup
+## Prequisites
 
-- create a python 3.5 virtualenv
+You need:
+- A python 3.5 virtualenv
+- PostgreSQL
+
+## Setup
 
 - install requirements:
 ````
 pip install -r requirements.txt
 ````
-- install PostgreSQL and create a database named metabet, with no password
+- Create a database named metabet, with no password:
+````
+CREATE DATABASE metabet;
+````
 - Launch the database migration:
 ````
 ./manage.py migrate
