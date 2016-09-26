@@ -22,6 +22,10 @@ CREATE DATABASE metabet;
 ````
 ./manage.py migrate
 ````
+- load a season's data (eg 2016-2017):
+````
+./manage.py load_competition 2016-2017
+````
 - launch the server
 ````
 ./manage.py runserver 5000
