@@ -2,7 +2,7 @@
 
 Football data and API. Developed in Python 3.5.1 with Django 1.10.
 
-## Prequisites
+## Prerequisites
 
 You need:
 - A python 3.5 virtualenv
@@ -28,6 +28,6 @@ CREATE DATABASE metabet;
 ````
 - launch the server
 ````
-./manage.py runserver 5000
+./manage.py runserver
 ````
-- The API is now accessible through [http://localhost:5000/api/competitions/](http://localhost:5000/api/competitions/)
+- The API is now accessible through [http://localhost:8000/api/competitions/](http://localhost:8000/api/competitions/)
