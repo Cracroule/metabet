@@ -13,8 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from graphene_django.views import GraphQLView
+
 from django.conf.urls import include, url
 
 urlpatterns = [
-    url('^', include('metabet_core.urls'))
+    url('^', include('metabet_core.urls')),
+    url(r'^graphql', GraphQLView.as_view(graphiql=True)),
 ]
