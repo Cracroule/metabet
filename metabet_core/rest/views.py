@@ -52,9 +52,9 @@ class MatchListView(ListAPIView):
         if cs_id:
             query = Q(competition_season_id=cs_id)
         if team_id and (home_team_id or away_team_id):
-            raise InvalidParameterException({'reason': 'Cannot supply team_id and '
-                                            '(home_team_id or away_team_id) '
-                                            'together'})
+            raise InvalidParameterException({'reason': 'Cannot supply team_id '
+                                             'and (home_team_id or '
+                                             'away_team_id) together'})
         if team_id:
             query &= (Q(home_team_id=team_id) | Q(away_team_id=team_id))
         if home_team_id:
